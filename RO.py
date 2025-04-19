@@ -15,6 +15,7 @@ from api_ollama import call_ollama
 from openai_api import call_openai
 from groq_api import call_groq
 from openrouter_api import call_openrouter
+from lm_studio_api import call_lm_studio
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -80,7 +81,8 @@ class ModelEvaluator:
             "ollama": call_ollama,
             "openai": call_openai,
             "groq": call_groq,
-            "openrouter": call_openrouter
+            "openrouter": call_openrouter,
+            "lm_studio": call_lm_studio
         }
         self.embedding_cache = {}
         self.results_table = []

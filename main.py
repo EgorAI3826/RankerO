@@ -7,6 +7,7 @@ from api_ollama import get_model_info as get_ollama_model_info
 from openai_api import get_model_info as get_openai_model_info
 from groq_api import get_model_info as get_groq_model_info
 from openrouter_api import get_model_info as get_openrouter_model_info
+from lm_studio_api import get_model_info as get_lm_studio_model_info
 from datetime import datetime
 import os
 
@@ -19,7 +20,8 @@ MODELS = [
     ("llama3.1:8b", "ollama"),
     ("gpt-4o-mini", "openai"),
     ("llama3-8b-8192", "groq"),
-    ("qwen/qwen-plus", "openrouter")
+    ("qwen/qwen-plus", "openrouter"),
+    ("mistral-7b-instruct", "lm_studio")
 ]
 
 # Separate datasets into BASE and MERA categories
@@ -40,7 +42,8 @@ def get_model_info(model_name: str, provider: str) -> dict:
         "ollama": get_ollama_model_info,
         "openai": get_openai_model_info,
         "groq": get_groq_model_info,
-        "openrouter": get_openrouter_model_info
+        "openrouter": get_openrouter_model_info,
+        "lm_studio": get_lm_studio_model_info
     }
     return providers.get(provider, lambda x: {
         "architecture": "unknown",
@@ -256,7 +259,7 @@ def main():
                     gr.Markdown("Add custom models by specifying provider and model name.")
                     provider_dropdown = gr.Dropdown(
                         label="Provider",
-                        choices=["ollama", "openai", "groq", "openrouter"],
+                        choices=["ollama", "openai", "groq", "openrouter", "lm_studio"],
                         value="ollama"
                     )
                     custom_model_input = gr.Textbox(
