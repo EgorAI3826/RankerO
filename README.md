@@ -48,113 +48,137 @@ RankerO is a comprehensive AI model evaluation framework designed to assess and 
 
 ## Installation
 
+Follow these steps to set up RankerO on your system.
+
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/EgorAI3826/RankerO.git
    cd RankerO
-Create a Virtual Environment (recommended to avoid conflicts with system-wide packages):
+Create a Virtual Environment:
+To avoid conflicts with system-wide packages, create and activate a virtual environment:
 bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# On Unix/Linux/MacOS
+source venv/bin/activate
+# On Windows
+venv\Scripts\activate
 Install Dependencies:
-The repository includes a requirements.txt file listing all required libraries. Install them with:
+The repository includes a requirements.txt file with all required libraries. Install them using:
 bash
 pip install -r requirements.txt
-The dependencies include:
-gradio==4.44.0: For the interactive dashboard.
-pandas==2.2.3: For data handling.
-numpy==1.26.4: For numerical computations.
-scikit-learn==1.5.2: For cosine similarity calculations.
-ollama==0.3.3: For local model inference and embeddings.
-openai==1.51.0: For OpenAI API access.
-groq==0.11.0: For Groq API access.
+Dependencies:
+gradio==4.44.0: Interactive dashboard
+pandas==2.2.3: Data handling
+numpy==1.26.4: Numerical computations
+scikit-learn==1.5.2: Cosine similarity calculations
+ollama==0.3.3: Local model inference and embeddings
+openai==1.51.0: OpenAI API access
+groq==0.11.0: Groq API access
 Install Ollama:
 Download and install Ollama from ollama.com.
-Start the Ollama server:
+Start the Ollama server in a terminal:
 bash
 ollama serve
-Pull required models (e.g., llama3.1:8b for evaluation and bge-m3:567m-fp16 for embeddings):
+Pull required models for evaluation and embeddings:
 bash
 ollama pull llama3.1:8b
 ollama pull bge-m3:567m-fp16
 Verify models are available:
 bash
 ollama list
-Set Up API Keys:
-Create a .env file in the project root to store API keys for non-Ollama providers:
-bash
-echo "OPENAI_API_KEY=your_key_here" >> .env
-echo "GROQ_API_KEY=your_key_here" >> .env
-echo "OPENROUTER_API_KEY=your_key_here" >> .env
-If only using Ollama, this step is optional.
-Download Datasets (optional):
-Datasets are downloaded automatically when needed, but you can run down.py to fetch them in advance:
+Set Up API Keys (Optional):
+If using non-Ollama providers (OpenAI, Groq, OpenRouter), add your API keys by editing the respective Python files in your project directory (e.g., openrouter_api.py, groq_api.py, openai_api.py, api_ollama.py). For example:
+Locate the files in your project folder (paths may vary, e.g., C:\Users\User\Desktop\Rank\).
+Open each file in a text editor and insert your API key as specified in the file (e.g., replace a placeholder like YOUR_API_KEY with your actual key).
+Example for openai_api.py:
+python
+API_KEY = "your_openai_key_here"
+Note: Skip this step if only using Ollama models, as Ollama does not require API keys for local inference.
+Download Datasets (Optional):
+Datasets are downloaded automatically during evaluation. To fetch them in advance:
 bash
 python down.py
 Usage
+Run evaluations and view results using the Gradio web interface.
 Launch the Evaluation Dashboard:
 Ensure the Ollama server is running (ollama serve in a separate terminal).
 Start the Gradio interface:
 bash
 python main.py
-Access the web interface at http://localhost:7860.
+Open the web interface at http://localhost:7860.
 Configure Evaluation:
-Datasets: Select BASE and/or MERA datasets using the checkboxes. Use "Select All" or "Deselect All" for convenience.
+Datasets:
+Select BASE and/or MERA datasets via checkboxes.
+Use "Select All" or "Deselect All" buttons for quick selection.
 Models:
 Choose predefined models (e.g., llama3.1:8b (ollama), gpt-4o-mini (openai)).
-Add custom models via the "Custom Models" section by specifying the provider and model name (e.g., llama3.1:8b for Ollama).
-Example: To use a different Ollama model, add llama3.1:70b or any model listed in ollama list.
-Embedding Model: Select an embedding model (default: bge-m3:567m-fp16) or specify a custom one in the "Embedding Model" tab.
-Adjust evaluation thresholds if needed (default thresholds are dataset-specific).
+Add custom models in the "Custom Models" section by specifying provider and model name (e.g., llama3.1:70b for Ollama).
+Verify custom models are available (e.g., run ollama list for Ollama models).
+Embedding Model:
+Select an embedding model (default: bge-m3:567m-fp16) or enter a custom one in the "Embedding Model" tab.
+Thresholds:
+Adjust evaluation thresholds if needed (defaults are dataset-specific).
 Run Evaluation:
 Click "Start Evaluation" to test selected models on chosen datasets.
 Monitor progress in the "Evaluation Status" textbox.
-View results in the "Detailed Results" and "Summary Statistics" tabs.
-Interpret Results:
-Detailed Results: Question-by-question breakdown with predicted answers, expected answers, embedding similarity, and correctness.
+View results in:
+Detailed Results: Question-by-question analysis with predicted answers, expected answers, embedding similarity, and correctness.
 Summary Statistics: Overall accuracy and category-specific scores (reasoning, coding, math, etc.).
-Results are saved as HTML (evaluation_results_YYYYMMDD_HHMMSS.html) and CSV (data.csv) in the data directory.
-Configuring Models
-Predefined Models: Defined in main.py under MODELS. Example:
-python
-MODELS = [
-    ("llama3.1:8b", "ollama"),
-    ("gpt-4o-mini", "openai"),
-    ("llama3-8b-8192", "groq"),
-    ("qwen/qwen-plus", "openrouter")
-]
-To use a different Ollama model (e.g., llama3.1:70b), either:
-Add it to the Gradio UI under "Custom Models".
-Edit MODELS in main.py (e.g., replace ("llama3.1:8b", "ollama") with ("llama3.1:70b", "ollama")).
-Custom Models: Use the Gradio UI to add models without editing code. Ensure the model is available:
-For Ollama: Run ollama pull <model_name> (e.g., ollama pull llama3.1:70b).
-For other providers: Verify the model name matches the provider’s API (e.g., gpt-4o for OpenAI).
-Troubleshooting
-Ollama Server Not Running:
-Ensure ollama serve is active before running main.py.
-Check available models with ollama list.
-Missing Embedding Model:
-Pull the default embedding model: ollama pull bge-m3:567m-fp16.
-Select an alternative in the Gradio UI if needed.
-API Key Errors:
-Verify .env file contains valid keys for OpenAI, Groq, or OpenRouter.
-Use only Ollama models to bypass API key requirements.
-Dependency Issues:
-Ensure requirements.txt dependencies are installed in the virtual environment.
-Run pip install -r requirements.txt again if errors occur.
-Dataset Not Found:
-Run python down.py to download datasets or check the dataset directory.
-Contributing
-Contributions are welcome! Please open an issue or submit a pull request for:
-Bug fixes
-Additional dataset integrations
-New model provider support
-Feature enhancements
-License
-MIT License
-Contact
-For questions or support, contact EgorAI3826 via GitHub.
-RankerO - Empowering AI model evaluation and comparison
+Interpret Results:
+Results are saved in the data directory:
+HTML report: evaluation_results_YYYYMMDD_HHMMSS.html
+CSV summary: data.csv
+Use the Gradio interface to explore detailed metrics and compare model performance.
+
+### Changes Made
+1. **API Key Setup**:
+   - Replaced the `.env` file instructions with guidance to edit the Python files (`openrouter_api.py`, `groq_api.py`, `openai_api.py`, `api_ollama.py`).
+   - Clarified that file paths may vary (e.g., `C:\Users\User\Desktop\Rank\` or elsewhere) and provided a generic instruction to locate them in the project directory.
+   - Included an example of editing `openai_api.py` to show how to insert an API key.
+   - Noted that API keys are optional for Ollama users.
+
+2. **Maintained Aesthetic**:
+   - Kept the clean, structured format with numbered steps, bold headings, and bullet points.
+   - Used code blocks for commands and Python snippets to ensure clarity.
+   - Retained the Markdown note for optional steps to avoid confusion.
+
+3. **Improved Clarity**:
+   - Emphasized that users should check the specific Python files for API key placeholders.
+   - Added a note about verifying file locations, accommodating variable project directories.
+   - Kept instructions concise while ensuring all necessary steps are covered.
+
+### Notes
+- **File Paths**: The instruction avoids hardcoding paths like `C:\Users\User\Desktop\Rank\` and uses generic terms like "project directory" to be universally applicable. Users are guided to locate the files themselves.
+- **API Key Implementation**: Assumed the Python files have a clear placeholder (e.g., `API_KEY = "your_key_here"`) for users to replace. If the files require a different format (e.g., a configuration dictionary or environment variable fallback), please share their structure for more precise instructions.
+- **Other Sections**: Only "Installation" and "Usage" are updated, as requested. If you want the "Configuring Models" or "Troubleshooting" sections to reflect the API key change (e.g., updating troubleshooting to mention editing Python files), I can provide those.
+- **Dependencies**: The dependency list remains unchanged, as no new libraries were introduced. Ensure `requirements.txt` is in the repository root.
+- **Ollama**: The instructions still emphasize running `ollama serve` and pulling models, as these are critical for most users.
+
+### Next Steps
+1. **Integrate into README**:
+   - Replace the "Installation" and "Usage" sections in your full `README.md` with the updated text above.
+   - Ensure `requirements.txt`, `main.py`, `down.py`, and the API Python files (`openrouter_api.py`, etc.) are in the repository.
+
+2. **Verify Setup**:
+   - Test the instructions on a fresh environment:
+     - Clone the repo, create a virtual environment, install dependencies.
+     - Edit the API Python files with dummy keys (or skip for Ollama).
+     - Run `ollama serve`, pull models, and launch `main.py`.
+   - Confirm the Gradio interface loads and evaluations run without API key errors.
+
+3. **Update Repository**:
+   - Commit the updated `README.md` and any modified files:
+     ```bash
+     git add README.md requirements.txt
+     git commit -m "Update README with API key editing instructions"
+     git push
+     ```
+
+4. **User Feedback**:
+   - Share the updated README with users (e.g., Филипп) to confirm it addresses setup issues.
+   - If users report difficulties editing the Python files (e.g., unclear placeholders), provide the file contents or update the instructions.
+
+If you need further refinements (e.g., specific formatting, adding screenshots, or updating other README sections), or if you can share the contents of `openrouter_api.py`, `groq_api.py`, etc., to tailor the API key instructions, let me know! I can also assist with troubleshooting or enhancing the Gradio UI if additional issues arise.
 
 ### Changes Made
 1. **Virtual Environment**:
