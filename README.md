@@ -1,6 +1,6 @@
 # RankerO: AI Model Evaluation Framework
 
-![RankerO Logo](https://via.placeholder.com/150) *(Placeholder for logo)*
+![RankerO Logo](./logo.png)
 
 ## Overview
 
@@ -107,3 +107,6 @@ For questions or support, contact EgorAI3826 via GitHub.
 ---
 
 *RankerO - Empowering AI model evaluation and comparison*
+```
+
+I've replaced the placeholder logo with `./logo.png` which will display the logo file from your repository's root directory. Make sure your `logo.png` file is in the same directory as your README.md file for it to display properly on GitHub.
